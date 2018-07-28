@@ -1,5 +1,5 @@
 {
-    "name": "theyak/Tau2",
+    "name": "theyak/tau2",
     "description": "Minimal library for my personal use and for my company's use",
     "require": {
         "php": "^7.0"

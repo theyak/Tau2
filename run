@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Based upon https://james-forbes.com/?/posts/alternative-to-npm-scripts
+# Works similar to composer ... or npm run ..., but with comments and more readable!
+
+
+# Usage: 
+#   bash run test
+#   bash run check
+
+# Perform unit tests
+function test() {
+  vendor/bin/phpunit tests
+}
+
+# Perform code checks
+function check {
+  vendor/bin/phpcs --standard=psr12 src
+  vendor/bin/phpmd src text cleancode,codesize,controversial,design,unusedcode
+}
+
+# Run a function name in the context of this script
+eval "$@"

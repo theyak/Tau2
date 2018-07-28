@@ -1,0 +1,21 @@
+{
+    "name": "theyak/Tau2",
+    "description": "Minimal library for my personal use and for my company's use",
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Theyak\\Tau\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "squizlabs/php_codesniffer": "3.*",
+        "phpmd/phpmd" : "@stable"
+    },
+    "scripts": {
+        "test": "phpunit --testdox tests",
+        "check": "phpcs --standard=psr12 src && phpmd src text cleancode,codesize,controversial,design,unusedcode"
+    }
+}

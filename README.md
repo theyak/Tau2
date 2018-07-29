@@ -8,8 +8,8 @@ was created. It's not really useful for anything. Some of my goals were to learn
 
 * Installing editorconfig support in vim
 * Using and creating tests for phpunit
-* Using PHP CodeSniffer and learning about various coding styles
-* Using PHPMD to learn how bad my code is
+* Using PHP CodeSniffer, PHPMD, PHP-CS-Fixer, and Phan to check code. None were perfect.
+* Using PHP-CS-Fixer to learn how bad my code is
 * Creating a composer package and putting it on [Packagist](https://packagist.org)
 * PHP 7 language constructs
 

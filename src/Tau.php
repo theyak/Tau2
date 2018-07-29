@@ -1,14 +1,17 @@
 <?php
+
 namespace theyak;
 
 class Tau
 {
-    public static $EOL = PHP_SAPI === "cli" ? "\n" : "<br>\n";
+
+    public static $EOL = PHP_SAPI === 'cli' ? "\n" : "<br>\n";
+
 
     /**
-     * Determine if script is running via ajax
+     * Determine if script is running via ajax.
      *
-     * @return boolean
+     * @return bool
      */
     public static function isAjax(): bool
     {
@@ -17,9 +20,9 @@ class Tau
 
 
     /**
-     * Determines of script is running in CLI mode
+     * Determines of script is running in CLI mode.
      *
-     * @return boolean
+     * @return bool
      */
     public static function isCli(): bool
     {
@@ -37,10 +40,8 @@ class Tau
      * @param mixed $data Data to display
      * @param int $line (optional) line number called from
      * @param string $file (optional) file called from
-     *
-     * @SuppressWarnings(PHPMD)
      */
-    public static function dump($data, int $line = 0, string $file = ''): void
+    public static function dump($data, $line = 0, string $file = ''): void
     {
         if (!$file && function_exists('debug_backtrace')) {
             $dbg = debug_backtrace();
@@ -72,24 +73,20 @@ class Tau
             echo $data . ' (Length: ' . strlen($data) . ')';
         } elseif (!$data) {
             if (is_numeric($data)) {
-                echo "0 (number)";
+                echo '0 (number)';
             } elseif ($data === null) {
-                echo "null";
+                echo 'null';
             } else {
-                echo "empty";
+                echo 'empty';
             }
         } elseif (is_array($data) || is_object($data)) {
-            // An empty error handler is required for things such
-            // as result sets which do not work with print_r.
-            $oldHandler = set_error_handler(function () {
-                ;
-            });
-            if (static::isCli() || static::isAjax()) {
+            if (is_resource($data)) {
+                echo 'Resource';
+            } elseif (static::isCli() || static::isAjax()) {
                 print_r($data);
             } else {
                 echo htmlspecialchars(print_r($data, true));
             }
-            set_error_handler($oldHandler);
         } else {
             if (static::isCli() || static::isAjax()) {
                 echo $data;
@@ -98,10 +95,6 @@ class Tau
             }
         }
 
-        if (static::isCli() || static::isAjax()) {
-            echo PHP_EOL;
-        } else {
-            echo "</pre>";
-        }
+        echo (static::isCli() || static::isAjax()) ? PHP_EOL : '</pre>';
     }
 }

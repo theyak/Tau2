@@ -31,27 +31,32 @@ namespace Theyak\Tau;
 
 class Crypt
 {
-    public static $cipher = "AES-256-CBC";
+
+    public static $cipher = 'AES-256-CBC';
+
 
     public static function getRandomKey($length = 32): string
     {
         return openssl_random_pseudo_bytes($length);
     }
 
+
     public static function encrypt(string $key, string $plainText): string
     {
         $ivlen = openssl_cipher_iv_length(static::$cipher);
         $iv = openssl_random_pseudo_bytes($ivlen);
         $raw = openssl_encrypt($plainText, static::$cipher, $key, OPENSSL_RAW_DATA, $iv);
-        $hmac = hash_hmac("sha256", $raw, $key, true);
+        $hmac = hash_hmac('sha256', $raw, $key, true);
         return base64_encode($iv . $hmac . $raw);
     }
 
 
     /**
      * @SuppressWarnings(PHPMD.ShortVariable)
+     *
+     * @return string|bool
      */
-    public static function decrypt(string $key, string $encryptedString): string
+    public static function decrypt(string $key, string $encryptedString)
     {
         $c = base64_decode($encryptedString);
         $ivlen = openssl_cipher_iv_length(static::$cipher);
@@ -61,8 +66,8 @@ class Crypt
         $plainText = openssl_decrypt($raw, static::$cipher, $key, OPENSSL_RAW_DATA, $iv);
 
         // Added in PHP 5.6
-        if (function_exists("hash_hmac") && function_exists("hash_equals")) {
-            $calcmac = hash_hmac("sha256", $raw, $key, true);
+        if (function_exists('hash_hmac') && function_exists('hash_equals')) {
+            $calcmac = hash_hmac('sha256', $raw, $key, true);
             if (hash_equals($hmac, $calcmac)) {
                 return $plainText;
             }

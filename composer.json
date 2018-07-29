@@ -12,11 +12,12 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^7.0",
-        "squizlabs/php_codesniffer": "3.*",
-        "phpmd/phpmd" : "@stable"
+        "squizlabs/php_codesniffer": "3.*"
     },
     "scripts": {
         "test": "phpunit --testdox tests",
-        "check": "phpcs --standard=psr12 src && phpmd src text codesize,design,unusedcode"
+        "check": [
+            "phpcs --warning-severity=1"
+        ]
     }
 }

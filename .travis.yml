@@ -13,4 +13,4 @@ script:
     - phpcs --version
     - phpunit --version
     - phpcs -p -s -v -n --standard=./phpcs.xml.dist
-    - phpunit --bootstrap="vendor/autoload.php" tests
+    - phpunit tests

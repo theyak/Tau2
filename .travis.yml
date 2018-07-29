@@ -3,14 +3,14 @@
 language: php
 
 php:
-    - "7.2"
+    - "7.1"
 
 install:
     - composer require "squizlabs/php_codesniffer=*"
     - phpenv rehash
 
 script:
-    - phpcs --version
+    - vendor/bin/phpcs --version
     - phpunit --version
-    - phpcs -p -s -v -n --standard=./phpcs.xml.dist
+    - /vendor/bin/phpcs -p -s -v -n --standard=./phpcs.xml.dist
     - phpunit --bootstrap="vendor/autoload.php" tests

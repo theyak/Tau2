@@ -100,4 +100,46 @@ class Tau
 
         echo (static::isCli() || static::isAjax()) ? PHP_EOL : '</pre>';
     }
+
+
+    /**
+     * Registers a Tau autoloader
+     *
+     * @param bool $allowGlobal Flag allowing the application to use global
+     *        class names such as TauCrypt as opposed to \Theyak\Tau\Crypt.
+     *        This is not recommended and considered poor practice, but
+     *        does allow a semblance of compatability with the original Tau.
+     */
+    public static function registerAutoloader(bool $allowGlobal = false)
+    {
+        if ($allowGlobal) {
+            class_alias('Theyak\\Tau', 'Tau');
+        }
+        spl_autoload_register(function ($class) use ($allowGlobal) {
+            $loadClass = false;
+            $useAlias = false;
+            $split = explode('\\', $class);
+
+            // Handle things like \TauCrypt
+            if ($allowGlobal && count($split) === 1 && substr($class, 0, 3) === 'Tau') {
+                $useAlias = true;
+                $loadClass = substr($class, 3);
+            } elseif (count($split) > 1) {
+                $idx = array_search('Tau', $split);
+                if ($idx !== false && isset($split[$idx + 1])) {
+                    $loadClass = $split[$idx + 1];
+                }
+            }
+
+            if ($loadClass) {
+                $file = __DIR__ . DIRECTORY_SEPARATOR . $loadClass . '.php';
+                if (is_file($file)) {
+                    require_once($file);
+                    if ($useAlias) {
+                        class_alias('Theyak\\Tau\\' . $loadClass, 'Tau' . $loadClass);
+                    }
+                }
+            }
+        });
+    }
 }

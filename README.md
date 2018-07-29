@@ -31,7 +31,7 @@ Installation
 ------------
 
 ### Install with Composer
-Currently Tau2 only supports installation via [Composer](https://github.com/composer/composer).
+[Composer](https://github.com/composer/composer) is the recommended installation method.
 
 ```sh
 composer require theyak/tau2:dev-master
@@ -47,6 +47,33 @@ or
 In your PHP script, use the standard autoloader.
 
 ```php
-require "vendor/autoload.php";
+require_once "vendor/autoload.php";
 ```
+
+### Install source from GitHub
+To install the source code:
+
+    $ git clone git://github.com/theyak/tau2.git
+
+And include it in your scripts:
+
+```php
+require_once '/path/to/Tau/src/Tau.php';
+```
+
+You'll probably also want to register an autoloader:
+
+```php
+Theyak\Tau::registerAutoloader();
+```
+
+You can optionally enable Tau v1 class names, such as TauCrypt, by passing true
+to the autoloader. This isn't recommended but may be useful for compatability
+with the original version of Tau.
+
+```php
+Theyak\Tau::registerAutoloader(true);
+```
+
+
 

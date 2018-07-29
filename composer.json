@@ -17,7 +17,7 @@
     "scripts": {
         "test": "phpunit --testdox tests",
         "check": [
-            "phpcs --warning-severity=1"
+            "phpcs -w"
         ]
     }
 }

@@ -32,15 +32,24 @@ namespace Theyak\Tau;
 class Crypt
 {
 
+    /**
+     * @var string
+     */
     public static $cipher = 'AES-256-CBC';
 
 
-    public static function getRandomKey($length = 32): string
+    public static function getRandomKey(int $length = 32): string
     {
         return openssl_random_pseudo_bytes($length);
     }
 
 
+    /**
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
     public static function encrypt(string $key, string $plainText): string
     {
         $ivlen = openssl_cipher_iv_length(static::$cipher);
@@ -52,9 +61,10 @@ class Crypt
 
 
     /**
-     * @SuppressWarnings(PHPMD.ShortVariable)
      *
      * @return string|bool
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public static function decrypt(string $key, string $encryptedString)
     {

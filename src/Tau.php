@@ -5,6 +5,9 @@ namespace theyak;
 class Tau
 {
 
+    /**
+     * @var string
+     */
     public static $EOL = PHP_SAPI === 'cli' ? "\n" : "<br>\n";
 
 
@@ -26,7 +29,7 @@ class Tau
      */
     public static function isCli(): bool
     {
-        return php_sapi_name() == 'cli';
+        return PHP_SAPI === 'cli';
     }
 
 
@@ -41,7 +44,7 @@ class Tau
      * @param int $line (optional) line number called from
      * @param string $file (optional) file called from
      */
-    public static function dump($data, $line = 0, string $file = ''): void
+    public static function dump($data, int $line = 0, string $file = ''): void
     {
         if (!$file && function_exists('debug_backtrace')) {
             $dbg = debug_backtrace();

@@ -7,6 +7,7 @@
     <arg name="colors" />
     <arg name="parallel" value="75" />
     <arg value="np"/>
+    <arg name="warning-severity" value="1" />
 
 	<rule ref="PSR12"/>
 	<rule ref="PSR2"/>
@@ -21,6 +22,8 @@
 
     <!-- Covers rule: Braces should always be used, even when they are not required. -->
     <rule ref="Generic.ControlStructures.InlineControlStructure"/>
-    <rule ref="Generic.CodeAnalysis"/>
+    <rule ref="Generic.CodeAnalysis">
+    </rule>
+
 
 </ruleset>

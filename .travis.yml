@@ -6,11 +6,11 @@ php:
     - "7.0"
 
 install:
-    - pear install pear/PHP_CodeSniffer
+    - composer install
     - phpenv rehash
 
 script:
     - phpcs --version
     - phpunit --version
     - phpcs -p -s -v -n --standard=./phpcs.xml.dist
-    - phpunit tests
+    - phpunit --bootstrap="vendor/autoload.php" tests

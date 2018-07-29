@@ -12,4 +12,5 @@ install:
 script:
     - phpcs --version
     - phpunit --version
-    - phpcs -p -s -v -n src --standard=./phpcs.xml.dist
+    - phpcs -p -s -v -n --standard=./phpcs.xml.dist
+    - phpunit tests

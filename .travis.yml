@@ -8,8 +8,9 @@ php:
 install:
     - pyrus install http://phptal.org/latest.tar.gz
     - pear install pear/PHP_CodeSniffer
+    - phpenv rehash
 
 script:
     - phpcs --version
     - phpunit --version
-    - vendor/bin/phpcs -p -s -v -n src --standard=./phpcs.xml.dist
+    - phpcs -p -s -v -n src --standard=./phpcs.xml.dist

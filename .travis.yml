@@ -6,7 +6,7 @@ php:
     - "7.1"
 
 install:
-    - composer require "squizlabs/php_codesniffer=*"
+    - pear install pear/PHP_CodeSniffer
     - phpenv rehash
 
 script:

@@ -11,7 +11,7 @@
 
 	<rule ref="PSR12"/>
 	<rule ref="PSR2"/>
-    <rule ref="Squiz.Whitespace">
+    <rule ref="Squiz.WhiteSpace">
         <exclude name="Squiz.WhiteSpace.FunctionClosingBraceSpace.SpacingBeforeClose"/>
         <exclude name="Squiz.WhiteSpace.FunctionSpacing.AfterLast"/>
     </rule>

@@ -15,9 +15,9 @@ was created. It's not really useful for anything. Some of my goals were to learn
 
 For a more complete, and PHP 5 compatible version, please use [Tau](https://github.com/theyak/Tau). 
 I wouldn't really suggest using this any more. It was written circa 2010 with no particular
-coding style or methodologies in mind. However, it's not actively maintained or updated, and
+coding style or methodologies in mind. It's not actively maintained or updated, and
 therefore I recommend something like the [Nette Framework](https://nette.org/), which is really
-more a set of utility routines than a framework, instead.
+more a set of utility routines than a framework.
 
 Most of the functions in the original library are now better used by more modern libraries.
 Here are some examples:
@@ -31,8 +31,7 @@ Installation
 ------------
 
 ### Install with Composer
-If you're using [Composer](https://github.com/composer/composer) to manage
-dependencies, you can add Tau2 with it.
+Currently Tau2 only supports installation via [Composer](https://github.com/composer/composer).
 
 ```sh
 composer require theyak/tau2:dev-master
@@ -45,7 +44,7 @@ or
         }
     }
 
-Use the standard autoloader to use
+In your PHP script, use the standard autoloader.
 
 ```php
 require "vendor/autoload.php";

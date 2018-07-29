@@ -12,7 +12,7 @@ install:
 script:
     - vendor/bin/phpcs --version
     - phpunit --version
-    - vendor/bin phpcs -p -s -v -n --standard=./phpcs.xml.dist
+    - vendor/bin/phpcs -p -s -v -n --standard=./phpcs.xml.dist
     - phpunit --bootstrap="vendor/autoload.php" tests
 
 #    - pear install pear/PHP_CodeSniffer

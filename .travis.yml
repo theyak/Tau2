@@ -5,10 +5,9 @@ language: php
 php:
     - "7.0"
 
-before-script:
-    - composer install
-    - phpcs --version
-
 script:
+    - composer install --dev
+    - phpcs --version
     - phpunit --version
-    - vendor/bin/phpcs -p -s -v -n src --standard=./phpcs.xml.dist
+
+#    - vendor/bin/phpcs -p -s -v -n src --standard=./phpcs.xml.dist

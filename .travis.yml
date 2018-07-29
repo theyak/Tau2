@@ -10,4 +10,5 @@ before-script:
     - phpcs --version
 
 script:
+    - phpunit --version
     - phpcs -p -s -v -n src --standard=./phpcs.xml.dist --extensions=php

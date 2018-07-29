@@ -5,7 +5,7 @@
  *
  * @Author          theyak
  * @Copyright       2018
- * @Project Page    https://github.com/theyak/Tau
+ * @Project Page    https://github.com/theyak/tau2
  * @docs            None!
  *
  * 2018-07-24 Created
@@ -14,7 +14,7 @@
 /*
 Example:
 
-include "Tau/modules/Crypt.php";
+require "vendor/autoload.php";
 
 use \Theyak\Tau\Crypt;
 
@@ -49,7 +49,7 @@ class Crypt
 
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public static function decrypt(string $key, string $encryptedString): string
     {

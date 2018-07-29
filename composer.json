@@ -6,6 +6,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Theyak\\": "src/",
             "Theyak\\Tau\\": "src/"
         }
     },
@@ -16,6 +17,6 @@
     },
     "scripts": {
         "test": "phpunit --testdox tests",
-        "check": "phpcs --standard=psr12 src && phpmd src text cleancode,codesize,controversial,design,unusedcode"
+        "check": "phpcs --standard=psr12 src && phpmd src text codesize,design,unusedcode"
     }
 }

@@ -16,7 +16,7 @@ class Tau
      *
      * @return bool
      */
-    public static function isAjax(): bool
+    public static function isAjax()
     {
         return filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest';
     }
@@ -27,7 +27,7 @@ class Tau
      *
      * @return bool
      */
-    public static function isCli(): bool
+    public static function isCli()
     {
         return PHP_SAPI === 'cli';
     }
@@ -44,7 +44,7 @@ class Tau
      * @param int $line (optional) line number called from
      * @param string $file (optional) file called from
      */
-    public static function dump($data, int $line = 0, string $file = ''): void
+    public static function dump($data, $line = 0, $file = '')
     {
         if (!$file && function_exists('debug_backtrace')) {
             $dbg = debug_backtrace();
@@ -110,7 +110,7 @@ class Tau
      *        This is not recommended and considered poor practice, but
      *        does allow a semblance of compatability with the original Tau.
      */
-    public static function registerAutoloader(bool $allowGlobal = false)
+    public static function registerAutoloader($allowGlobal = false)
     {
         if ($allowGlobal) {
             class_alias('Theyak\\Tau', 'Tau');

@@ -74,15 +74,6 @@ class Clock extends \DateTime
 
 
     /**
-     * Alias of copy()
-     */
-    public function clone()
-    {
-        return clone $this;
-    }
-
-
-    /**
      * Clone of \DateTime's format method with a default parameter of ISO 8601 time
      *
      * @param  string $format See http://php.net/manual/en/function.date.php

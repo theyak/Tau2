@@ -9,11 +9,15 @@ install:
     - composer install
     - phpenv rehash
 
+before_script:
+    - mkdir -p build/logs
+    - ls -al
+
 script:
     - vendor/bin/phpcs --version
     - phpunit --version
     - vendor/bin/phpcs -p -s -v -n --standard=./phpcs.xml.dist
-    - phpunit --bootstrap="vendor/autoload.php" tests
+    - phpunit --bootstrap="vendor/autoload.php" --coverage-clover build/logs/clover.xml tests
 
 after_success:
-  - travis_retry php vendor/bin/php-coveralls
+  - travis_retry php vendor/bin/php-coveralls -v

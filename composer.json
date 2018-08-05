@@ -2,7 +2,7 @@
     "name": "theyak/tau2",
     "description": "Minimal library for my personal use and for my company's use",
     "require": {
-        "php": "^5.6",
+        "php": "^5.6"
     },
     "autoload": {
         "psr-4": {
@@ -16,7 +16,7 @@
         "php-coveralls/php-coveralls": "^2.1"
     },
     "scripts": {
-        "test": "phpunit --coverage-clover build/logs/cover.xml --testdox tests",
+        "test": "phpunit --testdox tests",
         "check": "phpcs"
     }
 }

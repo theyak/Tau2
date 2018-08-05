@@ -13,7 +13,7 @@ final class ClockTest extends TestCase
         $this->assertEquals($t->format('Y-m-d H:i:s'), '2018-08-31 23:39:11');
         $this->assertInstanceOf(\DateTimeZone::class, $tz);
         $this->assertEquals($tz->getName(), '-04:00');
-    } 
+    }
 
 
     public function testShouldCreateFromSqlString()
@@ -64,16 +64,6 @@ final class ClockTest extends TestCase
     }
 
 
-    public function testShouldClone()
-    {
-        $clock = new Clock();
-        $copy = $clock->clone();
-
-        $clock->modify('+1 day');
-        $this->assertNotEquals($clock->format('c'), $copy->format('c'));
-    }
-
-
     public function testShouldSetTimezone()
     {
         $clock = new clock('2017-01-01t12:00:00+00:00');
@@ -109,7 +99,7 @@ final class ClockTest extends TestCase
 
     public function testShouldChain()
     {
-        
+
         $clock = new Clock('2017-01-01T12:00:00+00:00');
         $update = $clock->copy()->setTimezone('US/Pacific')->format();
 

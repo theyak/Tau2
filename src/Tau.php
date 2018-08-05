@@ -1,6 +1,6 @@
 <?php
 
-namespace theyak;
+namespace Theyak;
 
 class Tau
 {

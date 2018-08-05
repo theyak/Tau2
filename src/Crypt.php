@@ -38,7 +38,7 @@ class Crypt
     public static $cipher = 'AES-256-CBC';
 
 
-    public static function getRandomKey(int $length = 32): string
+    public static function getRandomKey($length = 32)
     {
         return openssl_random_pseudo_bytes($length);
     }
@@ -50,7 +50,7 @@ class Crypt
      *
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public static function encrypt(string $key, string $plainText): string
+    public static function encrypt($key, $plainText)
     {
         $ivlen = openssl_cipher_iv_length(static::$cipher);
         $iv = openssl_random_pseudo_bytes($ivlen);
@@ -66,7 +66,7 @@ class Crypt
      *
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public static function decrypt(string $key, string $encryptedString)
+    public static function decrypt($key, $encryptedString)
     {
         $c = base64_decode($encryptedString);
         $ivlen = openssl_cipher_iv_length(static::$cipher);
@@ -75,15 +75,10 @@ class Crypt
         $raw = substr($c, $ivlen + 32);
         $plainText = openssl_decrypt($raw, static::$cipher, $key, OPENSSL_RAW_DATA, $iv);
 
-        // Added in PHP 5.6
-        if (function_exists('hash_hmac') && function_exists('hash_equals')) {
-            $calcmac = hash_hmac('sha256', $raw, $key, true);
-            if (hash_equals($hmac, $calcmac)) {
-                return $plainText;
-            }
-            return false;
+        $calcmac = hash_hmac('sha256', $raw, $key, true);
+        if (hash_equals($hmac, $calcmac)) {
+            return $plainText;
         }
-
-        return $plainText;
+        return false;
     }
 }

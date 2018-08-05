@@ -1,7 +1,9 @@
 Tau library, version 2
 ======================
 
-This is a very minimal start to PHP 7 conversion of my standard library that
+[![Build Status](https://travis-ci.com/theyak/tau2.svg?branch=master)](https://travis-ci.com/theyak/tau2)
+
+This is a very minimal start to PHP 7 (Note: changed to PHP 5.6) conversion of my standard library that
 I use with my own PHP projects. My goal was not to actually re-write a library
 of functions that no one uses, but rather to learn about all the PHP tooling
 that has come around since the original package was created. Some of my goals

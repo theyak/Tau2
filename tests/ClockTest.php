@@ -69,7 +69,21 @@ final class ClockTest extends TestCase
         $clock = new clock('2017-01-01t12:00:00+00:00');
         $clock->settimezone('us/pacific');
 
-        $this->assertequals($clock->format(), '2017-01-01T04:00:00-08:00');
+        $this->assertequals('2017-01-01T04:00:00-08:00', $clock->format('c'));
+    }
+    
+    public function testShouldSetTimezoneInConstructor()
+    {
+        $clock = new clock('2017-01-01T12:00:00+00:00', 'US/Pacific');
+        $this->assertequals('2017-01-01T04:00:00-08:00', $clock->format());
+    }
+
+    public function testTimestamp()
+    {
+        $dt = new DateTime('2017-01-01');
+        $timestamp = $dt->getTimestamp();
+        $clock = new Clock($timestamp);
+        $this->assertEquals('2017-01-01T00:00:00+00:00', $clock->format());
     }
 
 
@@ -94,6 +108,7 @@ final class ClockTest extends TestCase
         $this->assertEquals($clock->hours, 12);
         $this->assertEquals($clock->minutes, 20);
         $this->assertEquals($clock->seconds, 30);
+        $this->assertNull($clock->other);
     }
 
 
@@ -105,6 +120,14 @@ final class ClockTest extends TestCase
 
         $this->assertEquals($clock->format(), '2017-01-01T12:00:00+00:00');
         $this->assertEquals($update, '2017-01-01T04:00:00-08:00');
+    }
+
+
+
+    public function testShouldConvertToIsoString()
+    {
+        $clock = new Clock('2017-01-01T12:00:00+00:00');
+        $this->assertEquals('2017-01-01T12:00:00+00:00', (string)$clock);
     }
 
 

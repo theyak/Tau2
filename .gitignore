@@ -2,6 +2,7 @@
 
 # Logs
 logs
+report
 *.log
 
 # Runtime data
@@ -10,5 +11,4 @@ composer.lock
 # Dependency directories
 vendor/
 tools/
-
 

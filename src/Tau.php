@@ -43,6 +43,8 @@ class Tau
      * @param mixed $data Data to display
      * @param int $line (optional) line number called from
      * @param string $file (optional) file called from
+     *
+     * @codeCoverageIgnore
      */
     public static function dump($data, $line = 0, $file = '')
     {
@@ -109,6 +111,8 @@ class Tau
      *        class names such as TauCrypt as opposed to \Theyak\Tau\Crypt.
      *        This is not recommended and considered poor practice, but
      *        does allow a semblance of compatability with the original Tau.
+     *
+     * @codeCoverageIgnore
      */
     public static function registerAutoloader($allowGlobal = false)
     {

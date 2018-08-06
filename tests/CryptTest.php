@@ -19,4 +19,16 @@ final class CryptTest extends TestCase
         $this->assertEquals($decrypt, false);
     }
 
+    public function testShoudlGetRandomKey()
+    {
+        $key = Crypt::getRandomKey();
+        $this->assertEquals(32, strlen($key));
+    }
+
+    public function testShoudlGetLongRandomKey()
+    {
+        $key = Crypt::getRandomKey(48);
+        $this->assertEquals(48, strlen($key));
+    }
+
 }

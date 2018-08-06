@@ -44,7 +44,14 @@ class Clock extends \DateTime
             $time = $time->format('Y-m-d H:i:s.u');
         }
 
-        parent::__construct($time, $timezone);
+        parent::__construct($time);
+
+        // Although the parent constructor is supposed to take
+        // a timezone, we found it didn't always work so we 
+        // set it here. Very strange.
+        if ($timezone) {
+            $this->setTimezone($timezone);
+        }
     }
 
 
@@ -106,25 +113,19 @@ class Clock extends \DateTime
         switch (strtolower($property)) {
             case 'day':
                 return (int) $this->format('d');
-                break;
             case 'month':
                 return (int) $this->format('m');
-                break;
             case 'year':
                 return (int) $this->format('Y');
-                break;
             case 'hour':
             case 'hours':
                 return (int) $this->format('H');
-                break;
             case 'minute':
             case 'minutes':
                 return (int) $this->format('i');
-                break;
             case 'second':
             case 'seconds':
                 return (int) $this->format('s');
-                break;
         }
         return null;
     }

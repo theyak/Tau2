@@ -2,6 +2,7 @@ Tau library, version 2
 ======================
 
 [![Build Status](https://travis-ci.com/theyak/tau2.svg?branch=master)](https://travis-ci.com/theyak/tau2)
+![Coverage](https://codecov.io/gh/theyak/tau2/branch/master/graph/badge.svg)
 
 This is a very minimal start to PHP 7 (Note: changed to PHP 5.6) conversion of my standard library that
 I use with my own PHP projects. My goal was not to actually re-write a library

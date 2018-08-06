@@ -47,7 +47,7 @@ class Clock extends \DateTime
         parent::__construct($time);
 
         // Although the parent constructor is supposed to take
-        // a timezone, we found it didn't always work so we 
+        // a timezone, we found it didn't always work so we
         // set it here. Very strange.
         if ($timezone) {
             $this->setTimezone($timezone);

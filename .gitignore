@@ -4,6 +4,7 @@
 logs
 report
 *.log
+coverage.xml
 
 # Runtime data
 composer.lock

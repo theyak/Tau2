@@ -55,7 +55,7 @@ require_once "vendor/autoload.php";
 ```
 
 ### Install source from GitHub
-To install the source code:
+Tau has no dependencies outside of standard PHP extensions such as mysqlnd, and therefore can be installed directly. To install using the source code, issue the following command:
 
     $ git clone git://github.com/theyak/tau2.git
 
@@ -65,15 +65,15 @@ And include it in your scripts:
 require_once '/path/to/Tau/src/Tau.php';
 ```
 
-You'll probably also want to register an autoloader:
+You'll probably also want to register an autoloader so that you don't have to manually include each file:
 
 ```php
 Theyak\Tau::registerAutoloader();
 ```
 
-You can optionally enable Tau v1 class names, such as TauCrypt, by passing true
+You can optionally enable Tau v1 class names, such as TauCrypt and TauClock, by passing true
 to the autoloader. This isn't recommended but may be useful for compatability
-with the original version of Tau.
+with the original version of Tau if there comes a time when more things are ported to Tau2.
 
 ```php
 Theyak\Tau::registerAutoloader(true);

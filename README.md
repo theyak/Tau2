@@ -31,6 +31,8 @@ Here are some examples:
 * Tau::dump can be replaced with [VarDumper](https://symfony.com/doc/current/components/var_dumper.html),
  [Kint](https://kint-php.github.io/kint/), or [Tracy](https://tracy.nette.org/)
 
+[Opulence](https://github.com/opulencephp/Opulence) is a similar library, but much more complete.
+
 Installation
 ------------
 

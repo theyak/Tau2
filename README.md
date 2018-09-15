@@ -28,6 +28,7 @@ Here are some examples:
 * TauHttp can be replaced with [Requests](https://github.com/rmccue/Requests)
 * TauDb can be replaced with [dibiphp](https://github.com/dg/dibi) or [Nette Database](https://doc.nette.org/en/2.4/database)
 * TauCache can be replaced with [Stash](http://www.stashphp.com/) or [Nette Caching](https://doc.nette.org/en/2.4/caching)
+* TauTemplate can be replaces with [Foil](https://github.com/FoilPHP/Foil)
 * Tau::dump can be replaced with [VarDumper](https://symfony.com/doc/current/components/var_dumper.html),
  [Kint](https://kint-php.github.io/kint/), or [Tracy](https://tracy.nette.org/)
 * Lots of ORMs can be found at [ORM Benchmarks](https://github.com/c9s/forked-php-orm-benchmark)

@@ -24,7 +24,8 @@ coding style or methodologies in mind. It's not actively maintained or updated.
 Therefore I recommend something like the [Nette Framework](https://nette.org/), which is really
 more a set of utility routines than a framework, or [Opulence](https://github.com/opulencephp/Opulence).
 
-Most of the functions in the original library are now better used by more modern libraries.
+When Tau was originally written, circa 2010-2012, there weren't a whole lot of libraries that
+had similar functionality as Tau. Today, most of the functions in the original library are now better used by more modern libraries.
 Here are some examples:
 * TauHttp can be replaced with [Requests](https://github.com/rmccue/Requests)
 * TauDb can be replaced with [dibiphp](https://github.com/dg/dibi), [Nette Database](https://doc.nette.org/en/2.4/database), or [pdox](https://github.com/izniburak/pdox).

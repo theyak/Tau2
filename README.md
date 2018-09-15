@@ -16,6 +16,7 @@ were to learn:
 * Creating a composer package and putting it on [Packagist](https://packagist.org)
 * Setting up continuous integration with Travis-CI.
 * PHP 7 language constructs
+* Setting up code coverage with Phpunit, xdebug, and codecov.io, and maybe coveralls.
 
 For a more complete, and PHP 5 compatible version, please use [Tau](https://github.com/theyak/Tau).
 I wouldn't really suggest using this any more. It was written circa 2010 with no particular

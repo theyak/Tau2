@@ -35,7 +35,7 @@ class View
      */
     public function __construct($options = [])
     {
-        $this->options = $options;
+        $this->options = $this->toArray($options);
 
         if ($folders = $this->getOpt('folders')) {
             $this->setPaths($this->toArray($folders));
@@ -55,6 +55,21 @@ class View
         $this->debug = $this->getOpt('debug', false);
 
         $this->addBlock('minimize', 'static::minimize');
+    }
+
+    /**
+     * Assigns data to template
+     *
+     * @param  string|array $key Name of variable to use in template
+     * @param  mixed $value
+     */
+    public function assign($key, $value = null): void
+    {
+        if (is_array($key)) {
+            $this->data = array_merge($this->data, $key);
+        } else {
+            $this->data[$key] = $value;
+        }
     }
 
     /**
@@ -91,7 +106,14 @@ class View
         }
     }
 
-    public function addBlock($name, $callable)
+    /**
+     * Adds a block which allows performing operations on the output
+     * between block() and endBlock() calls.
+     *
+     * @param  string $name Name of block
+     * @param  callabale $callable Processes string
+     */
+    public function addBlock(string $name, callable $callable): void
     {
         if (is_callable($callable)) {
             $this->blocks[$name] = $callable;
@@ -104,14 +126,23 @@ class View
         }
     }
 
-    public function block($name, $data = []) {
+    /**
+     * The block function called within templates to start a block capture
+     *
+     * @param  string $name
+     * @param  mixed $data Data to pass to final callable
+     */
+    public function block(string $name, $data = []): void {
         if (isset($this->blocks[$name]) && is_callable($this->blocks[$name])) {
             $this->blockStack[] = [$this->blocks[$name], $data];
             ob_start();
         }
     }
 
-    public function endBlock()
+    /**
+     * Ends a block function and calls the associated callable
+     */
+    public function endBlock(): void
     {
         if (ob_get_level()) {
             $text = ob_get_clean();
@@ -127,7 +158,7 @@ class View
      *
      * @param  string|function $file
      */
-    protected function finder($file)
+    protected function finder($file): ?string
     {
         if (!$file) {
             return null;
@@ -135,6 +166,10 @@ class View
 
         if (is_callable($file)) {
             $file = $file();
+        }
+
+        if (!is_string($file)) {
+            throw new \TypeError("Argument 1 passed to Theyak\Tau\View::finder() must be of type string or callable");
         }
 
         if (is_array($this->extensions)) {
@@ -182,7 +217,7 @@ class View
      *
      * @param  string $file
      */
-    public function find(string $file)
+    public function find(string $file): ?string
     {
         $template = $this->finder($file);
         if (!$template) {
@@ -273,12 +308,7 @@ class View
      * Get a value from the options object/array
      */
     private function getOpt(string $key, $dflt = null) {
-        if (is_object($this->options)) {
-            return property_exists($this->options, $key) ? $this->options->{$key} : $dflt;
-        }
-        if (is_array($this->options)) {
-            return isset($this->options[$key]) ? $this->options[$key] : $dflt;
-        }
+        return isset($this->options[$key]) ? $this->options[$key] : $dflt;
 
         return $dflt;
     }

@@ -30,6 +30,7 @@ Here are some examples:
 * TauCache can be replaced with [Stash](http://www.stashphp.com/) or [Nette Caching](https://doc.nette.org/en/2.4/caching)
 * Tau::dump can be replaced with [VarDumper](https://symfony.com/doc/current/components/var_dumper.html),
  [Kint](https://kint-php.github.io/kint/), or [Tracy](https://tracy.nette.org/)
+* Lots of ORMs can be found at [ORM Benchmarks](https://github.com/c9s/forked-php-orm-benchmark)
 
 [Opulence](https://github.com/opulencephp/Opulence) is a similar library, but much more complete.
 

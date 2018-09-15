@@ -5,6 +5,8 @@ use Theyak\Tau\Clock;
 
 final class ClockTest extends TestCase
 {
+
+
     public function testShouldCreateFromIsoString()
     {
         $t = new Clock('2018-08-31T23:39:11-04:00');
@@ -46,7 +48,7 @@ final class ClockTest extends TestCase
         ];
 
 
-        foreach($modifiers AS $modifier) {
+        foreach ($modifiers as $modifier) {
             $dt = new \DateTime($modifier);
             $clock = new Clock($modifier);
             $this->assertEquals($dt->format('c'), $clock->format('c'));
@@ -59,7 +61,7 @@ final class ClockTest extends TestCase
         $clock = new Clock();
         $copy = $clock->copy();
 
-        $clock->modify("+1 day");
+        $clock->modify('+1 day');
         $this->assertNotEquals($clock->format('c'), $copy->format('c'));
     }
 
@@ -71,12 +73,14 @@ final class ClockTest extends TestCase
 
         $this->assertequals('2017-01-01T04:00:00-08:00', $clock->format('c'));
     }
-    
+
+
     public function testShouldSetTimezoneInConstructor()
     {
         $clock = new clock('2017-01-01T12:00:00+00:00', 'US/Pacific');
         $this->assertequals('2017-01-01T04:00:00-08:00', $clock->format());
     }
+
 
     public function testTimestamp()
     {
@@ -114,14 +118,12 @@ final class ClockTest extends TestCase
 
     public function testShouldChain()
     {
-
         $clock = new Clock('2017-01-01T12:00:00+00:00');
         $update = $clock->copy()->setTimezone('US/Pacific')->format();
 
         $this->assertEquals($clock->format(), '2017-01-01T12:00:00+00:00');
         $this->assertEquals($update, '2017-01-01T04:00:00-08:00');
     }
-
 
 
     public function testShouldConvertToIsoString()

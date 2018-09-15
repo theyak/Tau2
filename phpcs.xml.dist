@@ -13,7 +13,6 @@
         <exclude name="Squiz.WhiteSpace.FunctionClosingBraceSpace.SpacingBeforeClose"/>
         <exclude name="Squiz.WhiteSpace.FunctionSpacing.AfterLast"/>
     </rule>
-    <rule ref="Squiz.Strings.DoubleQuoteUsage"/>
 
     <!-- Covers rule: Braces shall be used for all blocks. -->
     <rule ref="Squiz.ControlStructures.ControlSignature"/>

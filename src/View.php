@@ -14,13 +14,21 @@ namespace Theyak\Tau;
 
 class View
 {
+
     protected $paths = [];
+
     protected $extensions = ['phtml'];
+
     protected $data = [];
+
     protected $debug = false;
+
     protected $defaultTemplate = null;
+
     protected $options = [];
+
     protected $blockStack = [];
+
 
     /**
      * Constructor
@@ -32,6 +40,8 @@ class View
      *     'extension' => (string|array) Extension(s) for view template files
      *     'debug' => (boolean) Turn debug mode on or off.
      *   ]
+     *
+     * phpcs:disable Generic.CodeAnalysis.AssignmentInCondition.Found
      */
     public function __construct($options = [])
     {
@@ -39,7 +49,7 @@ class View
 
         if ($folders = $this->getOpt('folders')) {
             $this->setPaths($this->toArray($folders));
-        } else if ($paths = $this->getOpt('paths')) {
+        } elseif ($paths = $this->getOpt('paths')) {
             $this->setPaths($this->toArray($paths));
         }
 
@@ -57,6 +67,7 @@ class View
         $this->addBlock('minimize', 'static::minimize');
     }
 
+
     /**
      * Assigns data to template
      *
@@ -71,6 +82,7 @@ class View
             $this->data[$key] = $value;
         }
     }
+
 
     /**
      * Add a path to search while looking for view file
@@ -89,6 +101,7 @@ class View
         $this->paths[$id] = $path;
     }
 
+
     /**
      * Set paths to search for view files
      *
@@ -98,13 +111,14 @@ class View
     {
         $this->paths = [];
         if (is_array($paths)) {
-            foreach ($paths AS $id => $key) {
+            foreach ($paths as $id => $key) {
                 $this->addPath($key, $id);
             }
-        } else if (is_string($paths)) {
+        } elseif (is_string($paths)) {
             $this->addPath($paths);
         }
     }
+
 
     /**
      * Adds a block which allows performing operations on the output
@@ -118,7 +132,7 @@ class View
         if (is_callable($callable)) {
             $this->blocks[$name] = $callable;
         } else {
-            $this->blocks[$name] = function() {
+            $this->blocks[$name] = function () {
                 if ($this->debug) {
                     echo 'Block: ' . $name;
                 }
@@ -126,18 +140,21 @@ class View
         }
     }
 
+
     /**
      * The block function called within templates to start a block capture
      *
      * @param  string $name
      * @param  mixed $data Data to pass to final callable
      */
-    public function block(string $name, $data = []): void {
+    public function block(string $name, $data = []): void
+    {
         if (isset($this->blocks[$name]) && is_callable($this->blocks[$name])) {
             $this->blockStack[] = [$this->blocks[$name], $data];
             ob_start();
         }
     }
+
 
     /**
      * Ends a block function and calls the associated callable
@@ -152,6 +169,7 @@ class View
             }
         }
     }
+
 
     /**
      * Look for file within paths
@@ -169,7 +187,7 @@ class View
         }
 
         if (!is_string($file)) {
-            throw new \TypeError("Argument 1 passed to Theyak\Tau\View::finder() must be of type string or callable");
+            throw new \TypeError('Argument 1 passed to Theyak\Tau\View::finder() must be of type string or callable');
         }
 
         if (is_array($this->extensions)) {
@@ -189,9 +207,9 @@ class View
         }
 
         // Check paths for file
-        foreach ($extensions AS $ext) {
+        foreach ($extensions as $ext) {
             if (is_array($paths) && count($paths) > 0) {
-                foreach ($this->paths AS $path) {
+                foreach ($this->paths as $path) {
                     $search = $path . $file . '.' . $ext;
                     if (is_file($search)) {
                         return $search;
@@ -201,7 +219,7 @@ class View
         }
 
         // Check current folder
-        foreach ($this->extensions AS $ext) {
+        foreach ($this->extensions as $ext) {
             $search = './' . $file . '.' . $ext;
             if (is_file($search)) {
                 return $search;
@@ -233,10 +251,12 @@ class View
         return $template;
     }
 
+
     public function embed(string $file, array $data = []): void
     {
         $this->render($file, $data);
     }
+
 
     public function render(string $file, array $data = []): void
     {
@@ -254,6 +274,7 @@ class View
             ob_end_flush();
         }
     }
+
 
     /**
      * Generate a id for the path so that it can be directly accessed
@@ -304,10 +325,12 @@ class View
         return [];
     }
 
+
     /**
      * Get a value from the options object/array
      */
-    private function getOpt(string $key, $dflt = null) {
+    private function getOpt(string $key, $dflt = null)
+    {
         return isset($this->options[$key]) ? $this->options[$key] : $dflt;
 
         return $dflt;
@@ -318,6 +341,6 @@ class View
     {
         $lines = preg_split('/\r\n|\r|\n/', $text);
         $lines = array_map('trim', $lines);
-        return implode("", $lines);
+        return implode('', $lines);
     }
 }

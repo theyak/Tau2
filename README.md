@@ -27,7 +27,7 @@ more a set of utility routines than a framework.
 Most of the functions in the original library are now better used by more modern libraries.
 Here are some examples:
 * TauHttp can be replaced with [Requests](https://github.com/rmccue/Requests)
-* TauDb can be replaced with [dibiphp](https://github.com/dg/dibi) or [Nette Database](https://doc.nette.org/en/2.4/database)
+* TauDb can be replaced with [dibiphp](https://github.com/dg/dibi), [Nette Database](https://doc.nette.org/en/2.4/database), or [pdox](https://github.com/izniburak/pdox).
 * TauCache can be replaced with [Stash](http://www.stashphp.com/) or [Nette Caching](https://doc.nette.org/en/2.4/caching)
 * TauTemplate can be replaces with [Foil](https://github.com/FoilPHP/Foil)
 * Tau::dump can be replaced with [VarDumper](https://symfony.com/doc/current/components/var_dumper.html),

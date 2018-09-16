@@ -1,6 +1,8 @@
 <?php
 /**
  * View module for what may become Tau2 or something else entirely.
+ * Added blocks and helpers and some other niceties over the original
+ * version. Will probably add blocks to original.
  *
  * @Author          theyak
  * @Copyright       2018
@@ -27,7 +29,13 @@ class View
 
     protected $options = [];
 
+    protected $blocks = [];
+
     protected $blockStack = [];
+
+    protected $helpers = [];
+
+    public $files = [];
 
 
     /**
@@ -64,7 +72,7 @@ class View
         $this->extensions = $this->toArray($this->getOpt('extension', ['phtml']));
         $this->debug = $this->getOpt('debug', false);
 
-        $this->addBlock('minimize', 'static::minimize');
+        $this->registerBlock('minimize', 'static::minimize');
     }
 
 
@@ -121,23 +129,27 @@ class View
 
 
     /**
+     * Registers a helper function
+     *
+     * @param  string $name
+     * @param  callable $helper
+     */
+    public function registerHelper($name, callable $helper): void
+    {
+        $this->helpers[$name] = $helper;
+    }
+
+
+    /**
      * Adds a block which allows performing operations on the output
      * between block() and endBlock() calls.
      *
      * @param  string $name Name of block
-     * @param  callabale $callable Processes string
+     * @param  callabale $callable Function to process string
      */
-    public function addBlock(string $name, callable $callable): void
+    public function registerBlock(string $name, callable $callable): void
     {
-        if (is_callable($callable)) {
-            $this->blocks[$name] = $callable;
-        } else {
-            $this->blocks[$name] = function () {
-                if ($this->debug) {
-                    echo 'Block: ' . $name;
-                }
-            };
-        }
+        $this->blocks[$name] = $callable;
     }
 
 
@@ -182,7 +194,7 @@ class View
             return null;
         }
 
-        if (is_callable($file)) {
+        if (!is_string($file) && is_callable($file)) {
             $file = $file();
         }
 
@@ -251,7 +263,18 @@ class View
         return $template;
     }
 
+    /**
+     * Get current template file being processed
+     */
+    public function getFile(): string
+    {
+        return end($this->files);
+    }
 
+
+    /**
+     * Embed a template within another template
+     */
     public function embed(string $file, array $data = []): void
     {
         $this->render($file, $data);
@@ -268,10 +291,22 @@ class View
         extract($this->data, EXTR_REFS);
         extract($data, EXTR_REFS);
 
+        $this->files[] = $file;
         include $file;
+        array_pop($this->files);
 
         while (ob_get_status()) {
             ob_end_flush();
+        }
+    }
+
+    public function __get(string $key) {
+        echo '<div style="color:red">' . $key . '</div>';
+    }
+
+    public function __call(string $name, array $arguments) {
+        if (isset($this->helpers[$name])) {
+            $this->helpers[$name]($arguments);
         }
     }
 

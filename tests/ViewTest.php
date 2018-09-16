@@ -5,7 +5,9 @@ use Theyak\Tau\View;
 
 final class ViewTest extends TestCase
 {
+
     private $root;
+
 
     public function testShouldRenderView()
     {

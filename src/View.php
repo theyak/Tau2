@@ -263,6 +263,7 @@ class View
         return $template;
     }
 
+
     /**
      * Get current template file being processed
      */
@@ -317,11 +318,15 @@ class View
         return ob_get_clean();
     }
 
-    public function __get(string $key) {
+
+    public function __get(string $key)
+    {
         echo '<div style="color:red">' . $key . '</div>';
     }
 
-    public function __call(string $name, array $arguments) {
+
+    public function __call(string $name, array $arguments)
+    {
         if (isset($this->helpers[$name])) {
             $this->helpers[$name]($arguments);
         }

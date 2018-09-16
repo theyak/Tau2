@@ -281,6 +281,12 @@ class View
     }
 
 
+    /**
+     * Renders view
+     *
+     * @param  string $file
+     * @param  array $data
+     */
     public function render(string $file, array $data = []): void
     {
         $file = $this->find($file);
@@ -294,10 +300,21 @@ class View
         $this->files[] = $file;
         include $file;
         array_pop($this->files);
+    }
 
-        while (ob_get_status()) {
-            ob_end_flush();
-        }
+
+    /**
+     * Renders, capturing all output to a string
+     *
+     * @param  string $file
+     * @param  array $data
+     * @return string
+     */
+    public function renderToString(string $file, array $data = []): string
+    {
+        ob_start();
+        $this->render($file, $data);
+        return ob_get_clean();
     }
 
     public function __get(string $key) {
@@ -363,19 +380,27 @@ class View
 
     /**
      * Get a value from the options object/array
+     *
+     * @param  string $key Name of option to retrieve
+     * @param  mixed $dflt Value to return if option does not exist
+     * @return mixed
      */
     private function getOpt(string $key, $dflt = null)
     {
         return isset($this->options[$key]) ? $this->options[$key] : $dflt;
-
-        return $dflt;
     }
 
 
-    public static function minimize($text)
+    /**
+     * Remove space between tags if, and only if, all characters
+     * between tags are whitespace.
+     *
+     * @param  string $text
+     * @return string
+     */
+    public static function minimize(string $text): string
     {
-        $lines = preg_split('/\r\n|\r|\n/', $text);
-        $lines = array_map('trim', $lines);
-        return implode('', $lines);
+        $text = preg_replace('/>\s+</', '><', $text);
+        return trim($text);
     }
 }

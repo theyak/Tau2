@@ -65,7 +65,7 @@ class View
             if (is_callable($defaultTemplate)) {
                 $this->defaultTemplate = $options['defaultTemplate'];
             } else {
-                $this->defaultTemplate = (string) $defaultTemplate;
+                $this->defaultTemplate = $defaultTemplate;
             }
         }
 
@@ -118,12 +118,8 @@ class View
     public function setPaths(array $paths = []): void
     {
         $this->paths = [];
-        if (is_array($paths)) {
-            foreach ($paths as $id => $key) {
-                $this->addPath($key, $id);
-            }
-        } elseif (is_string($paths)) {
-            $this->addPath($paths);
+        foreach ($paths as $id => $key) {
+            $this->addPath($key, $id);
         }
     }
 
@@ -162,7 +158,7 @@ class View
     public function block(string $name, $data = []): void
     {
         if (isset($this->blocks[$name]) && is_callable($this->blocks[$name])) {
-            $this->blockStack[] = [$this->blocks[$name], $data];
+            $this->blockStack[] = [$name, $this->blocks[$name], $data];
             ob_start();
         }
     }
@@ -173,12 +169,10 @@ class View
      */
     public function endBlock(): void
     {
-        if (ob_get_level()) {
+        if (count($this->blockStack)) {
             $text = ob_get_clean();
-            if (count($this->blockStack)) {
-                $block = array_pop($this->blockStack);
-                echo call_user_func($block[0], $text, $block[1]);
-            }
+            $block = array_pop($this->blockStack);
+            echo call_user_func($block[1], $text, $block[2]);
         }
     }
 
@@ -186,26 +180,18 @@ class View
     /**
      * Look for file within paths
      *
-     * @param  string|function $file
+     * @param  string|callable $file
      */
     protected function finder($file): ?string
     {
-        if (!$file) {
-            return null;
-        }
-
         if (!is_string($file) && is_callable($file)) {
             $file = $file();
         }
 
         if (!is_string($file)) {
-            throw new \TypeError('Argument 1 passed to Theyak\Tau\View::finder() must be of type string or callable');
-        }
-
-        if (is_array($this->extensions)) {
-            $extensions = $this->extensions;
-        } else {
-            $extensions = ['phtml'];
+            throw new \TypeError(
+                'Argument 1 passed to Theyak\Tau\View::finder() must be of type string or callable that returns string'
+            );
         }
 
         // Check if path id is specified
@@ -219,10 +205,13 @@ class View
         }
 
         // Check paths for file
-        foreach ($extensions as $ext) {
+        foreach ($this->extensions as $ext) {
+            if ($ext) {
+                $ext = '.' . trim($ext, '.');
+            }
             if (is_array($paths) && count($paths) > 0) {
                 foreach ($this->paths as $path) {
-                    $search = $path . $file . '.' . $ext;
+                    $search = $path . $file . $ext;
                     if (is_file($search)) {
                         return $search;
                     }
@@ -232,7 +221,10 @@ class View
 
         // Check current folder
         foreach ($this->extensions as $ext) {
-            $search = './' . $file . '.' . $ext;
+            if ($ext) {
+                $ext = '.' . trim($ext, '.');
+            }
+            $search = './' . $file . $ext;
             if (is_file($search)) {
                 return $search;
             }
@@ -301,6 +293,19 @@ class View
         $this->files[] = $file;
         include $file;
         array_pop($this->files);
+
+        if (count($this->blockStack)) {
+            $end = end($this->blockStack);
+
+            // Close buffers
+            $size = count($this->blockStack);
+            while ($size--) {
+                ob_end_clean();
+            }
+            $this->blockStack = [];
+
+            throw new \Exception("Unclosed block " . $end[0]);
+        }
     }
 
 
@@ -314,7 +319,12 @@ class View
     public function renderToString(string $file, array $data = []): string
     {
         ob_start();
-        $this->render($file, $data);
+        try {
+            $this->render($file, $data);
+        } catch (\Error $ex) {
+            ob_get_clean();
+            throw $ex;
+        }
         return ob_get_clean();
     }
 

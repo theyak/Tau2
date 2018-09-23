@@ -47,6 +47,27 @@ final class ViewTest extends TestCase
     }
 
 
+    public function testShouldWorkWithMultipleVariables()
+    {
+        $view = new View();
+        $s = $view->render("tests/views/hellomulti", [
+            'name' => 'Variable',
+            'noun' => 'life',
+        ]);
+        $this->expectOutputString("<div>Hello Variable, how's life?</div>");
+    }
+
+    public function testShouldNotWorkWithMultipleBadVariables()
+    {
+        $view = new View();
+        $s = $view->render("tests/views/hellomulti", [
+            'nam' => 'Variable',
+            'nou' => 'life',
+        ]);
+        $this->expectOutputString("<div>Hello , how's ?</div>");
+    }
+
+
     public function testShouldWorkWithMultipleAssignedVariablesAsArray()
     {
         $view = new View();
@@ -87,6 +108,16 @@ final class ViewTest extends TestCase
     public function testShouldUsePaths()
     {
         $view = new View(['paths' => ['tests/views']]);
+        $s = $view->renderToString("helloworld");
+        $this->assertEquals("<div>Hello World!</div>", $s);
+    }
+
+
+    public function testShouldConvertObjectToArray()
+    {
+        $opts = new stdClass();
+        $opts->folders = ['tests/views'];
+        $view = new View($opts);
         $s = $view->renderToString("helloworld");
         $this->assertEquals("<div>Hello World!</div>", $s);
     }
@@ -212,9 +243,32 @@ final class ViewTest extends TestCase
     public function testHelper()
     {
         $view = new View();
-        $view->registerHelper('ucfirst', function($x) { return ucfirst($x); });
+        $view->registerHelper('ucfirst', function ($x) {
+            return ucfirst($x);        });
         $view->assign('name', 'variable');
         $s = $view->render('tests/views/helper');
         $this->expectOutputString("<div>Hello Variable!</div>");
+    }
+
+
+    public function testBadHelper()
+    {
+        $this->expectException(Exception::class);
+        $view = new View();
+        $view->assign('name', 'variable');
+        $s = $view->render('tests/views/helper');
+
+        // expectException doesn't seem to clear phpUnit's output buffer
+        ob_end_clean();
+    }
+
+
+    public function testEmbedAndGetFile()
+    {
+        $expected = "File: ./tests/views/header.phtml\n";
+        $expected .= "File: ./tests/views/body.phtml";
+        $view = new View();
+        $view->render('tests/views/body');
+        $this->expectOutputString($expected);
     }
 }

@@ -98,12 +98,10 @@ class View
     public function addPath(string $path, string $id = null): void
     {
         $path = str_replace('\\', '/', $path);
-        if (substr($path, -1) !== '/') {
-            $path .= '/';
-        }
+        $path = rtrim($path, '/');
 
         $id = $this->generatePathId($path, $id);
-        $this->paths[$id] = $path;
+        $this->paths[$id] = $path . '/';
     }
 
 
@@ -285,9 +283,19 @@ class View
         extract($this->data, EXTR_REFS);
         extract($data, EXTR_REFS);
 
+        // Turn off unknown variable warning
+        if (count($this->files) <= 0) {
+            $errorLevel = error_reporting();
+            error_reporting($errorLevel & ~E_NOTICE);
+        }
+
         $this->files[] = $file;
         include $file;
         array_pop($this->files);
+
+        if (count($this->files) <= 0) {
+            error_reporting($errorLevel);
+        }
 
         if (count($this->blockStack)) {
             $end = end($this->blockStack);
@@ -324,17 +332,13 @@ class View
     }
 
 
-    public function __get(string $key)
-    {
-        echo '<div style="color:red">' . $key . '</div>';
-    }
-
-
     public function __call(string $name, array $arguments)
     {
         if (isset($this->helpers[$name])) {
             return call_user_func_array($this->helpers[$name], $arguments);
         }
+
+        throw new \Exception("Call to undefined function $name()");
     }
 
 
@@ -347,21 +351,17 @@ class View
      */
     protected function generatePathId(string $path, string $id): string
     {
-        if (preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $id)) {
+        if (preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/u', $id)) {
             return $id;
         }
 
-        if (strpos($path, DIRECTORY_SEPARATOR) > 0) {
-            $parts = explode(DIRECTORY_SEPARATOR, $path);
+        if (strpos($path, '/') > 0) {
+            $parts = explode('/', $path);
             $end = array_pop($parts);
             return array_pop($parts) . '.' . $end;
         }
 
-        if (preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $path)) {
-            return $path;
-        }
-
-        return 'id' . md5($path);
+        return $path;
     }
 
 
@@ -380,11 +380,7 @@ class View
             return json_decode(json_encode($value), true);
         }
 
-        if (is_scalar($value)) {
-            return [$value];
-        }
-
-        return [];
+        return [$value];
     }
 
 

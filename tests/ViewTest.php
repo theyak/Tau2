@@ -95,7 +95,7 @@ final class ViewTest extends TestCase
     public function testShouldUseDefaultTemplate()
     {
         $view = new View([
-            'defaultTemplate' => 'tests/views/helloWorld'
+            'defaultTemplate' => 'tests/views/helloworld'
         ]);
         $s = $view->renderToString('badfile');
         $this->assertEquals("<div>Hello World!</div>", $s);

@@ -13,3 +13,4 @@ composer.lock
 vendor/
 tools/
 
+/nbproject/private/

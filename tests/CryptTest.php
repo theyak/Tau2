@@ -1,4 +1,7 @@
 <?php
+/**
+ * phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ */
 
 use PHPUnit\Framework\TestCase;
 use Theyak\Tau\Crypt;

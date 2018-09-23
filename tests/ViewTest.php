@@ -1,4 +1,7 @@
 <?php
+/**
+ * phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ */
 
 use PHPUnit\Framework\TestCase;
 use Theyak\Tau\View;
@@ -32,6 +35,7 @@ final class ViewTest extends TestCase
         $s = $view->render("tests/views/hellovariable");
         $this->expectOutputString("<div>Hello Variable!</div>");
     }
+
 
     public function testShouldWorkWithMultipleAssignedVariables()
     {
@@ -71,12 +75,14 @@ final class ViewTest extends TestCase
         $this->expectOutputString("<div><span></span></div><div>\n        Should not minimize\n    </div>");
     }
 
+
     public function testShouldUseFolders()
     {
         $view = new View(['folders' => ['tests/views']]);
         $s = $view->renderToString("helloworld");
         $this->assertEquals("<div>Hello World!</div>", $s);
     }
+
 
     public function testShouldUsePaths()
     {
@@ -85,12 +91,32 @@ final class ViewTest extends TestCase
         $this->assertEquals("<div>Hello World!</div>", $s);
     }
 
+
     public function testShouldUsePathsAsString()
     {
         $view = new View(['paths' => 'tests/views']);
         $s = $view->renderToString("helloworld");
         $this->assertEquals("<div>Hello World!</div>", $s);
     }
+
+
+    public function testNotFound()
+    {
+        $view = new View();
+        $s = $view->renderToString('badfile');
+        $this->assertEquals("", $s);
+    }
+
+
+    public function testNotFoundWithDebug()
+    {
+        $expected = "Checking for ./badfile.phtml\n";
+        $expected .= "Template not found: badfile\n";
+        $view = new View(['debug' => true]);
+        $s = $view->renderToString('badfile');
+        $this->assertEquals($expected, $s);
+    }
+
 
     public function testShouldUseDefaultTemplate()
     {
@@ -101,35 +127,22 @@ final class ViewTest extends TestCase
         $this->assertEquals("<div>Hello World!</div>", $s);
     }
 
-    public function testShouldUseCallableDefaultTemplate()
-    {
-        $view = new View(['defaultTemplate' => function() {
-            return "tests/views/helloworld";
-        }]);
-        $s = $view->renderToString('badfile');
-        $this->assertEquals("<div>Hello World!</div>", $s);
-    }
 
     public function testShouldFailInvalidTemplate()
     {
         $this->expectException(TypeError::class);
         $view = new View();
-        $s = $view->render(new stdClass);
+        $s = $view->render(new stdClass());
     }
+
 
     public function testShouldFailInvalidDefaultTemplate()
     {
         $this->expectException(TypeError::class);
-        $view = new View(['defaultTemplate' => new stdClass]);
-        $s = $view->render(new stdClass);
+        $view = new View(['defaultTemplate' => new stdClass()]);
+        $s = $view->render(new stdClass());
     }
 
-    public function testShouldErrorOnNullDefaultTemplate()
-    {
-        $this->expectException(TypeError::class);
-        $view = new View(['defaultTemplate' => null]);
-        $s = $view->render('badfile');
-    }
 
     public function testShouldErrorOnNullTemplate()
     {
@@ -138,6 +151,7 @@ final class ViewTest extends TestCase
         $s = $view->render();
     }
 
+
     public function testDefaultExtensionPhtml()
     {
         $view = new View(['extension' => null]);
@@ -145,18 +159,52 @@ final class ViewTest extends TestCase
         $this->assertEquals("<div>Hello World!</div>", $s);
     }
 
+
     public function testNoExtension()
     {
-        $this->expectException(TypeError::class);
         $view = new View(['extension' => false]);
         $s = $view->renderToString("tests/views/helloworld");
+        $this->assertEquals("", $s);
     }
+
 
     public function testNoExtensionWithExtensionIncludedInFilename()
     {
         $view = new View(['extension' => false]);
         $s = $view->renderToString("tests/views/helloworld.phtml");
+
         $this->assertEquals("<div>Hello World!</div>", $s);
     }
 
+
+    public function testSearchMultiplePaths()
+    {
+        $expected = "Checking for tests/helloworld.phtml\n";
+        $expected .= "Checking for tests/views/helloworld.phtml\n";
+        $expected .= '<div>Hello World!</div>';
+
+        $view = new View(['paths' => ['tests/', 'tests/views/'], 'debug' => true]);
+        $s = $view->renderToString("helloworld");
+        $this->assertEquals($expected, $s);
+    }
+
+
+    public function testUsePathById()
+    {
+        $expected = "Checking for tests/views/helloworld.phtml\n";
+        $expected .= '<div>Hello World!</div>';
+
+        $view = new View(['paths' => ['a' => 'tests/', 'b' => 'tests/views/'], 'debug' => true]);
+        $s = $view->renderToString('b::helloworld');
+        $this->assertEquals($expected, $s);
+    }
+
+
+    public function testShouldHandleMissingEndBlock()
+    {
+        $this->expectException(Exception::class);
+        $view = new View();
+        $s = $view->renderToString('tests/views/missingEndBlock');
+        $this->assertEquals("", $s);
+    }
 }

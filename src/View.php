@@ -44,7 +44,7 @@ class View
      * @param  array $options
      *   $options = [
      *     'paths' => (array) Paths to search for template files
-     *     'defaultTemplate' => (string|function) A default template to display if not found
+     *     'defaultTemplate' => (string) A default template to display if not found
      *     'extension' => (string|array) Extension(s) for view template files
      *     'debug' => (boolean) Turn debug mode on or off.
      *   ]
@@ -61,12 +61,9 @@ class View
             $this->setPaths($this->toArray($paths));
         }
 
-        if ($defaultTemplate = $this->getOpt('defaultTemplate')) {
-            if (is_callable($defaultTemplate)) {
-                $this->defaultTemplate = $options['defaultTemplate'];
-            } else {
-                $this->defaultTemplate = $defaultTemplate;
-            }
+        $this->defaultTemplate = $this->getOpt('defaultTemplate');
+        if ($this->defaultTemplate && !is_string($this->defaultTemplate)) {
+            throw new \TypeError('defaultTemplate must be a string.');
         }
 
         $this->extensions = $this->toArray($this->getOpt('extension', ['phtml']));
@@ -100,9 +97,9 @@ class View
      */
     public function addPath(string $path, string $id = null): void
     {
-        $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
-        if (substr($path, -1) !== DIRECTORY_SEPARATOR) {
-            $path .= DIRECTORY_SEPARATOR;
+        $path = str_replace('\\', '/', $path);
+        if (substr($path, -1) !== '/') {
+            $path .= '/';
         }
 
         $id = $this->generatePathId($path, $id);
@@ -180,20 +177,10 @@ class View
     /**
      * Look for file within paths
      *
-     * @param  string|callable $file
+     * @param  string $file
      */
-    protected function finder($file): ?string
+    protected function finder(string $file): ?string
     {
-        if (!is_string($file) && is_callable($file)) {
-            $file = $file();
-        }
-
-        if (!is_string($file)) {
-            throw new \TypeError(
-                'Argument 1 passed to Theyak\Tau\View::finder() must be of type string or callable that returns string'
-            );
-        }
-
         // Check if path id is specified
         if (strpos($file, '::') > 0) {
             list($id, $file) = explode('::', $file, 2);
@@ -210,8 +197,11 @@ class View
                 $ext = '.' . trim($ext, '.');
             }
             if (is_array($paths) && count($paths) > 0) {
-                foreach ($this->paths as $path) {
+                foreach ($paths as $path) {
                     $search = $path . $file . $ext;
+                    if ($this->debug) {
+                        echo "Checking for $search\n";
+                    }
                     if (is_file($search)) {
                         return $search;
                     }
@@ -225,6 +215,9 @@ class View
                 $ext = '.' . trim($ext, '.');
             }
             $search = './' . $file . $ext;
+            if ($this->debug) {
+                echo "Checking for $search\n";
+            }
             if (is_file($search)) {
                 return $search;
             }
@@ -243,10 +236,12 @@ class View
     {
         $template = $this->finder($file);
         if (!$template) {
-            $template = $this->finder($this->defaultTemplate);
+            if ($this->defaultTemplate) {
+                $template = $this->finder($this->defaultTemplate);
+            }
             if (!$template) {
                 if ($this->debug) {
-                    echo "Template not found: $file";
+                    echo "Template not found: $file\n";
                 }
                 return null;
             }
@@ -321,8 +316,8 @@ class View
         ob_start();
         try {
             $this->render($file, $data);
-        } catch (\Error $ex) {
-            ob_get_clean();
+        } catch (\Exception $ex) {
+            ob_end_clean();
             throw $ex;
         }
         return ob_get_clean();

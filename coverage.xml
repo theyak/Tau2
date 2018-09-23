@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1537731585">
-  <project timestamp="1537731585">
+<coverage generated="1537731775">
+  <project timestamp="1537731775">
     <package name="Theyak\Tau">
       <file name="I:\laragon\www\Tau2\src/Clock.php">
         <class name="Theyak\Tau\Clock" namespace="Theyak\Tau">

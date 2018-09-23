@@ -207,4 +207,14 @@ final class ViewTest extends TestCase
         $s = $view->renderToString('tests/views/missingEndBlock');
         $this->assertEquals("", $s);
     }
+
+
+    public function testHelper()
+    {
+        $view = new View();
+        $view->registerHelper('ucfirst', function($x) { return ucfirst($x[0]); });
+        $view->assign('name', 'variable');
+        $s = $view->render('tests/views/helper');
+        $this->expectOutputString("<div>Hello Variable!</div>");
+    }
 }

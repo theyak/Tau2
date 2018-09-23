@@ -333,7 +333,7 @@ class View
     public function __call(string $name, array $arguments)
     {
         if (isset($this->helpers[$name])) {
-            $this->helpers[$name]($arguments);
+            return $this->helpers[$name]($arguments);
         }
     }
 
